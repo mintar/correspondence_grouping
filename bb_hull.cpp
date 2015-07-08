@@ -7,8 +7,7 @@
 #include <pcl/common/time.h>
 #include <pcl/common/utils.h>
 #include <pcl/segmentation/extract_clusters.h>
-//#include <pcl/surface/convex_hull.h>
-#include <pcl/surface/concave_hull.h>
+#include <pcl/surface/convex_hull.h>
 #include <pcl/filters/crop_hull.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
@@ -24,9 +23,8 @@ int main()
         return (-1);
     }
 
-    pcl::ConcaveHull<pcl::PointXYZ> hull_calculator;
+    pcl::ConvexHull<pcl::PointXYZ> hull_calculator;
     hull_calculator.setInputCloud(cloud_in);
-    hull_calculator.setAlpha(1e3f);
 
     std::vector<pcl::Vertices> polygons;
     pcl::PointCloud<pcl::PointXYZ>::Ptr surface_hull(new pcl::PointCloud<pcl::PointXYZ>);
