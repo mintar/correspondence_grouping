@@ -13,3 +13,6 @@ target_link_libraries (correspondence_grouping ${PCL_LIBRARIES})
 
 add_executable (bb_hull bb_hull.cpp)
 target_link_libraries (bb_hull ${PCL_LIBRARIES})
+
+add_executable (bbox bbox.cpp)
+target_link_libraries (bbox ${PCL_LIBRARIES})
