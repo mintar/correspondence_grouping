@@ -16,3 +16,6 @@ target_link_libraries (bb_hull ${PCL_LIBRARIES})
 
 add_executable (bbox bbox.cpp)
 target_link_libraries (bbox ${PCL_LIBRARIES})
+
+add_executable (mesh_sampling mesh_sampling.cpp)
+target_link_libraries (mesh_sampling ${PCL_LIBRARIES})
