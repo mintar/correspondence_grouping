@@ -19,3 +19,9 @@ target_link_libraries (bbox ${PCL_LIBRARIES})
 
 add_executable (mesh_sampling mesh_sampling.cpp)
 target_link_libraries (mesh_sampling ${PCL_LIBRARIES})
+
+add_executable (visualize_2_clouds_with_normals visualize_2_clouds_with_normals.cpp)
+target_link_libraries (visualize_2_clouds_with_normals ${PCL_LIBRARIES})
+
+add_executable (add_normals add_normals.cpp)
+target_link_libraries (add_normals ${PCL_LIBRARIES})
