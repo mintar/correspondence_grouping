@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 project(correspondence_grouping)
 
-find_package(PCL 1.5 REQUIRED)
+add_compile_options(-std=c++11)
+
+find_package(PCL 1.7 REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
@@ -28,3 +30,6 @@ target_link_libraries (visualize_2_clouds_with_normals ${PCL_LIBRARIES})
 
 add_executable (add_normals add_normals.cpp)
 target_link_libraries (add_normals ${PCL_LIBRARIES})
+
+add_executable (transfer_attributes transfer_attributes.cpp)
+target_link_libraries (transfer_attributes ${PCL_LIBRARIES})
