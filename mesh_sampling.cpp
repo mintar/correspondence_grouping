@@ -80,6 +80,17 @@ randomPointTriangle (float a1, float a2, float a3, float b1, float b2, float b3,
 
 inline void
 randomPointTriangle (float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3,
+                     float r1, float r2, Eigen::Vector3f& n)
+{
+  Eigen::Vector4f tmp;
+  randomPointTriangle (a1, a2, a3, b1, b2, b3, c1, c2, c3, r1, r2, tmp);
+  n[0] = tmp[0];
+  n[1] = tmp[1];
+  n[2] = tmp[2];
+}
+
+inline void
+randomPointTriangle (float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3,
                      float r1, float r2, Eigen::Vector3i& c)
 {
   Eigen::Vector4f tmp;
@@ -104,19 +115,38 @@ randPSurface (vtkPolyData * polydata, std::vector<double> * cumulativeAreas, dou
   polydata->GetPoint (ptIds[0], A);
   polydata->GetPoint (ptIds[1], B);
   polydata->GetPoint (ptIds[2], C);
-  if (calcNormal)
-  {
-    // OBJ: Vertices are stored in a counter-clockwise order by default
-    Eigen::Vector3f v1 = Eigen::Vector3f (A[0], A[1], A[2]) - Eigen::Vector3f (C[0], C[1], C[2]);
-    Eigen::Vector3f v2 = Eigen::Vector3f (B[0], B[1], B[2]) - Eigen::Vector3f (C[0], C[1], C[2]);
-    n = v1.cross (v2);
-    n.normalize ();
-  }
+
   float r1 = static_cast<float> (uniform_deviate (rand ()));
   float r2 = static_cast<float> (uniform_deviate (rand ()));
   randomPointTriangle (float (A[0]), float (A[1]), float (A[2]),
                        float (B[0]), float (B[1]), float (B[2]),
                        float (C[0]), float (C[1]), float (C[2]), r1, r2, p);
+
+  if (calcNormal)
+  {
+    vtkFloatArray* normals = NULL;
+    if (polydata->GetPointData () != NULL)
+      normals = vtkFloatArray::SafeDownCast (polydata->GetPointData ()->GetNormals ());
+    if (normals != NULL)
+    {
+      // normals are present in the mesh -> use them
+      float nA[3], nB[3], nC[3];
+      normals->GetTupleValue (ptIds[0], nA);
+      normals->GetTupleValue (ptIds[1], nB);
+      normals->GetTupleValue (ptIds[2], nC);
+
+      randomPointTriangle (nA[0], nA[1], nA[2], nB[0], nB[1], nB[2], nC[0], nC[1], nC[2], r1, r2, n);
+    }
+    else
+    {
+      // no normals are present in the mesh -> calculate them
+      // OBJ/PLY: Vertices are stored in a counter-clockwise order by default
+      Eigen::Vector3f v1 = Eigen::Vector3f (A[0], A[1], A[2]) - Eigen::Vector3f (C[0], C[1], C[2]);
+      Eigen::Vector3f v2 = Eigen::Vector3f (B[0], B[1], B[2]) - Eigen::Vector3f (C[0], C[1], C[2]);
+      n = v1.cross (v2);
+    }
+    n.normalize ();
+  }
 
   if (calcColor)
   {
