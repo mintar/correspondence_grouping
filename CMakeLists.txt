@@ -24,3 +24,5 @@ target_link_libraries (visualize_2_clouds_with_normals ${PCL_LIBRARIES})
 
 add_executable (add_normals add_normals.cpp)
 target_link_libraries (add_normals ${PCL_LIBRARIES})
+
+install(TARGETS correspondence_grouping bb_hull bbox visualize_2_clouds_with_normals add_normals DESTINATION bin)
